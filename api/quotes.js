@@ -19,35 +19,42 @@ export default async function handler(req, res) {
     });
   }
 
-  try {
-    const responses = await Promise.all(
-      tickers.map(async ticker => {
-        const url =
-          `https://brapi.dev/api/quote/${ticker}?token=${encodeURIComponent(token)}`;
+  const results = [];
+  const errors = [];
 
-        const response = await fetch(url);
-        const body = await response.json();
+  for (const ticker of tickers) {
+    try {
+      const url =
+        `https://brapi.dev/api/quote/${ticker}?token=${encodeURIComponent(token)}`;
 
-        if (!response.ok) {
-          return null;
-        }
+      const response = await fetch(url);
+      const body = await response.json();
 
-        return body.results?.[0] || null;
-      })
-    );
+      if (response.ok && body.results?.[0]) {
+        results.push(body.results[0]);
+      } else {
+        errors.push({
+          ticker,
+          error: body.message || body.error || "Cotação indisponível."
+        });
+      }
+    } catch (error) {
+      errors.push({
+        ticker,
+        error: "Falha na consulta."
+      });
+    }
 
-    const results = responses.filter(Boolean);
-
-    res.setHeader(
-      "Cache-Control",
-      "s-maxage=60, stale-while-revalidate=120"
-    );
-
-    return res.status(200).json({ results });
-
-  } catch (error) {
-    return res.status(502).json({
-      error: "Erro ao consultar as cotações."
-    });
+    await new Promise(resolve => setTimeout(resolve, 500));
   }
+
+  res.setHeader(
+    "Cache-Control",
+    "s-maxage=60, stale-while-revalidate=120"
+  );
+
+  return res.status(200).json({
+    results,
+    errors
+  });
 }
