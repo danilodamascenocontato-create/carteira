@@ -7,7 +7,7 @@ Dashboard web responsivo, com estilo profissional escuro e endpoint de cotaçõe
 - BBSE3: 451 ações | R$ 14.861
 - CMIN3: 2.710 ações | R$ 12.547
 - BRAP4: 442 ações | R$ 8.013
-- VALE3: 73 ações | R$ 4.670
+- VALE3: 75 ações | R$ 4.670
 - BRKM5: 1.142 ações | R$ 3.585
 - TAEE3: 79 ações | R$ 1.090
 - BBDC3: 38 ações | R$ 508
