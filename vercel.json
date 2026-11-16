@@ -1,0 +1,1 @@
+{"version":2,"builds":[{"src":"index.html","use":"@vercel/static"},{"src":"api/quotes.js","use":"@vercel/node"}],"routes":[{"src":"/api/(.*)","dest":"/api/quotes.js"},{"src":"/(.*)","dest":"/$1"}]}
